@@ -9,7 +9,7 @@ public class Position {
 		x = 0;
 		y = 0;
 	}
-	
+
 	public Position(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -31,6 +31,10 @@ public class Position {
 	
 	public static boolean equalPoints(int x1, int y1, int x2, int y2) {
 		return (x1 == 2 && y1 == y2);
+	}
+	
+	public String toString(){
+		return "[" + x + "," + y + "]"; 
 	}
 	
 }
