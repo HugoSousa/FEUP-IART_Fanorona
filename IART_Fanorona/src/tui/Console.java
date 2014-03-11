@@ -26,6 +26,7 @@ public class Console {
 			// guardar direccao (n repeter jogadas consecutivas)
 			// guardar posicoes (nao voltar atras numa jogada)
 			// depois de jogar uma vez, tem de jogar aquela peça "getMovesInPosition"
+			//mudar condicao de paragem do ciclo de jogo (ate nao haver pecas de uma cor)
 			
 			ArrayList<Move> possiblePlays = game.possibleMoves();
 			possiblePlays = filterMoves(possiblePlays);
