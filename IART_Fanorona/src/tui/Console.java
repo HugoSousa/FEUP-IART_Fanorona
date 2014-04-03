@@ -6,6 +6,7 @@ import java.util.Scanner;
 import logic.Board.PlayType;
 import logic.Game;
 import logic.Move;
+import logic.Play;
 
 public class Console {
 
@@ -28,6 +29,10 @@ public class Console {
 			// "getMovesInPosition"
 			// mudar condicao de paragem do ciclo de jogo (ate nao haver pecas
 			// de uma cor)
+			ArrayList<Play> ps = game.possiblePlays();
+
+			for (Play p : ps)
+				System.out.println(p.toString());
 
 			ArrayList<Move> possiblePlays = game.possibleMoves();
 			possiblePlays = filterMoves(possiblePlays);

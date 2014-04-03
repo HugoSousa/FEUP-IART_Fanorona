@@ -34,7 +34,7 @@ public class Play implements Cloneable {
 
 	public boolean addMove(Move m) {
 		// TODO ultima direcao e posicoes alcancadas if verificiacoes
-		if (moves.size() < 3)
+		if (moves.size() < 10)
 			return moves.add(m);
 		else
 			return false;
