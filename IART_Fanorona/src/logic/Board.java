@@ -186,7 +186,7 @@ public class Board {
 		ArrayList<Position> gainedPieces = new ArrayList<Position>();
 
 		while (insideBoard(newX, newY)) {
-			if (color != EMPTY && color != get(newX, newY)) {
+			if (get(newX, newY) != EMPTY && color != get(newX, newY)) {
 				Position p = new Position(newX, newY);
 				gainedPieces.add(p);
 
@@ -258,6 +258,12 @@ public class Board {
 		}
 
 		if (simplePlay) {
+            for(Move m: firstMoves){
+                Play p = new Play();
+                p.addMove(m);
+                plays.add(p);
+            }
+
 			return plays;
 		}
 
@@ -315,8 +321,9 @@ public class Board {
 
 		ArrayList<Move> nextMoves = getMovesInPosition(actual);
 		boolean found = false;
+
 		for (Move m : nextMoves) {
-			if (m.type != PlayType.NONE) {
+			if (m.type != PlayType.NONE && oldPlay.validPlay(m)) {
 				found = true;
 				break;
 			}
@@ -355,15 +362,17 @@ public class Board {
 					m2.type = PlayType.APPROACH;
 					if (!p1.addMove(m1))
 						returnPlays.addAll(completePlay(color, p1));
+                    else returnPlays.add(p1);
 
 					if (!p2.addMove(m2))
 						returnPlays.addAll(completePlay(color, p2));
-
+                    else returnPlays.add(p2);
 				} else {
 					Play p = new Play(oldPlay);
 					try {
 						if (p.addMove((Move) m.clone()))
 							returnPlays.addAll(completePlay(color, p));
+                        else returnPlays.add(p);
 					} catch (CloneNotSupportedException e) {
 						e.printStackTrace();
 					}
@@ -421,6 +430,27 @@ public class Board {
 
 	}
 
+    public int getWinner(){
+        if(countPieces(WHITE) == 0)
+            return BLACK;
+        else if(countPieces(BLACK) == 0)
+            return WHITE;
+        else
+            return -1;
+    }
+
+    public int countPieces(int color){
+        int counter = 0;
+
+        for (int i = 0; i < b.length; i++) {
+            for (int j = 0; j < b[0].length; j++) {
+                if(b[i][j] == color)
+                    counter++;
+            }
+        }
+
+        return counter;
+    }
 	/*
 	 * public static void main(String[] args) { Board board = new Board();
 	 * board.show();

@@ -32,12 +32,38 @@ public class Play implements Cloneable {
 		}
 	}
 
+
+    public boolean validPlay(Move m){
+
+        if(moves.size() > 0) {
+            int actualdx = m.pFinal.getX() - m.pInit.getX();
+            int actualdy = m.pFinal.getY() - m.pInit.getY();
+
+            Move last = moves.get(moves.size() - 1);
+
+            int lastdx = last.pFinal.getX() - last.pInit.getX();
+            int lastdy = last.pFinal.getY() - last.pInit.getY();
+
+            if(actualdx == lastdx && actualdy == lastdy)
+                return false;
+        }
+
+        for (int i=0; i < moves.size(); i++) {
+            if (i == 0) {
+                if ( moves.get(i).pInit.equals(m.pFinal)) return false;
+            }
+            if ( moves.get(i).pFinal.equals(m.pFinal)) return false;
+        }
+
+        return true;
+    }
+
 	public boolean addMove(Move m) {
-		// TODO ultima direcao e posicoes alcancadas if verificiacoes
-		if (moves.size() < 10)
-			return moves.add(m);
-		else
-			return false;
+        if(! this.validPlay(m))
+            return false;
+        else
+            return moves.add(m);
+
 	}
 
 	public Move getLastMove() {
