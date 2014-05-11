@@ -12,6 +12,7 @@ public class GUI implements ActionListener{
 	Game game;
 	private Timer timer;
 	final static JFrame frame = new JFrame("Fanorona");
+	final static JTextField text = new JTextField();
 	final static JPanel menu = new JPanel();
 	final static String PP_BUTTON = "Player vs Player";
 	final static String CP_BUTTON = "Computer vs Player";
@@ -52,7 +53,7 @@ public class GUI implements ActionListener{
 		//remover jpanel atual
 		//criar novo jpanel com tabuleiro
 		frame.remove(menu);
-		
+		frame.setLayout(new BorderLayout());
 
 		final JPanel boardPanel = new BoardPanel();
 		boardPanel.setLayout(new GridLayout(5,9));
@@ -65,7 +66,14 @@ public class GUI implements ActionListener{
 		});
 		timer.start();
 		
-		frame.add(boardPanel);
+		text.setEditable(false);
+		text.setText("White pieces turn");
+		text.setHorizontalAlignment(JTextField.CENTER);
+		Font font = new Font("Verdana", Font.BOLD, 15);
+		text.setFont(font);
+		
+		frame.add(boardPanel, BorderLayout.CENTER);
+		frame.add(text, BorderLayout.PAGE_END);
 		frame.pack();
     }
 	
@@ -91,6 +99,23 @@ public class GUI implements ActionListener{
 		frame.setVisible(true);
 	}
 
+	public void switchTurn(){
+		game.switchTurn();
+		
+		System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
+		if(game.getTurn() == Game.WHITE){
+			text.setText("White pieces turn");
+			System.out.println("1");
+		}
+		else if(game.getTurn() == Game.BLACK)
+		{
+			text.setText("Black pieces turn");
+			System.out.println("2");
+		}
+		
+		frame.repaint();
+	}
+	
 	public static void main(String[] args) {
 		
 		/* Use an appropriate Look and Feel */

@@ -155,7 +155,7 @@ public class BoardPanel extends JPanel{
 											System.out.println("NAO HA MAIS JOGADAS");
 											isMultiplePlay = false;
 											plays.clear();
-											gui.game.switchTurn();
+											gui.switchTurn();
 											moveIndex = 0;
 											selectedPosition = null;
 										}
