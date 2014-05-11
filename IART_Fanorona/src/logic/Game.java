@@ -37,4 +37,8 @@ public class Game {
 		return board.possiblePlays(turn);
 
 	}
+	
+	public int getTurn(){
+		return turn;
+	}
 }
