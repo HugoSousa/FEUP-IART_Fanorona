@@ -11,8 +11,10 @@ public class GUI implements ActionListener{
 
 	Game game;
 	private Timer timer;
-	final static JFrame frame = new JFrame("Fanorona");
+	final static JFrame menuFrame = new JFrame("Fanorona");
+	static JFrame gameFrame = new JFrame("Fanorona");
 	final static JTextField text = new JTextField();
+	final static JButton newGame = new JButton("New Game");
 	final static JPanel menu = new JPanel();
 	final static String PP_BUTTON = "Player vs Player";
 	final static String CP_BUTTON = "Computer vs Player";
@@ -52,8 +54,9 @@ public class GUI implements ActionListener{
 		
 		//remover jpanel atual
 		//criar novo jpanel com tabuleiro
-		frame.remove(menu);
-		frame.setLayout(new BorderLayout());
+		//menuFrame.remove(menu);
+		menuFrame.dispose();
+		gameFrame.setLayout(new BorderLayout());
 
 		final JPanel boardPanel = new BoardPanel();
 		boardPanel.setLayout(new GridLayout(5,9));
@@ -66,15 +69,30 @@ public class GUI implements ActionListener{
 		});
 		timer.start();
 		
+		newGame.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e)
+            {
+            	System.out.println("NEW GAME");
+            	gameFrame.dispose();
+            	gameFrame = new JFrame("Fanorona");
+            	menuFrame.setVisible(true);
+                
+            }
+        });
+		
 		text.setEditable(false);
 		text.setText("White pieces turn");
 		text.setHorizontalAlignment(JTextField.CENTER);
 		Font font = new Font("Verdana", Font.BOLD, 15);
 		text.setFont(font);
 		
-		frame.add(boardPanel, BorderLayout.CENTER);
-		frame.add(text, BorderLayout.PAGE_END);
-		frame.pack();
+		gameFrame.add(newGame, BorderLayout.PAGE_START);
+		gameFrame.add(boardPanel, BorderLayout.CENTER);
+		gameFrame.add(text, BorderLayout.PAGE_END);
+		gameFrame.pack();
+		gameFrame.setSize(1200,800);
+		gameFrame.setLocationRelativeTo(null);
+		gameFrame.setVisible(true);
     }
 	
 	
@@ -86,23 +104,22 @@ public class GUI implements ActionListener{
 	 */
 	private void createAndShowGUI() {
 		//Create and set up the window.
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		menuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		//Create and set up the content pane.
 		GUI demo = new GUI();
-		demo.addComponentToPane(frame.getContentPane());
+		demo.addComponentToPane(menuFrame.getContentPane());
 
 		//Display the window.		
-		frame.pack();
-		frame.setSize(800,300);
-		frame.setLocationRelativeTo(null);
-		frame.setVisible(true);
+		menuFrame.pack();
+		menuFrame.setSize(800,300);
+		menuFrame.setLocationRelativeTo(null);
+		menuFrame.setVisible(true);
 	}
 
 	public void switchTurn(){
 		game.switchTurn();
 		
-		System.out.println("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
 		if(game.getTurn() == Game.WHITE){
 			text.setText("White pieces turn");
 			System.out.println("1");
@@ -113,7 +130,7 @@ public class GUI implements ActionListener{
 			System.out.println("2");
 		}
 		
-		frame.repaint();
+		gameFrame.repaint();
 	}
 	
 	public static void main(String[] args) {

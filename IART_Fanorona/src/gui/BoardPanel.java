@@ -11,6 +11,7 @@ import javax.swing.Timer;
 
 import logic.Board;
 import logic.Board.PlayType;
+import logic.Game;
 import logic.Move;
 import logic.Play;
 import logic.Position;
@@ -22,9 +23,10 @@ public class BoardPanel extends JPanel{
 	private int marginHorizontal = this.getWidth()/10;
 	private int marginVertical = this.getHeight()/6;
 	private ArrayList<Piece> pieces = new ArrayList<Piece>();
-	ArrayList<Play> plays = new ArrayList<Play>();
-	Position selectedPosition = null;
-	Position movePosition = null;
+	private ArrayList<Play> plays = new ArrayList<Play>();
+	private Position selectedPosition = null;
+	private Position movePosition = null;
+	private MouseListener ml;
 
 	int moveIndex = 0;
 	boolean isMultiplePlay = false;
@@ -33,8 +35,9 @@ public class BoardPanel extends JPanel{
 	public BoardPanel() {
 		super();
 
+		
 		//se nao for CC
-		this.addMouseListener(new MouseAdapter() { 
+		this.addMouseListener(ml = new MouseAdapter() { 
 			public void mousePressed(MouseEvent me) { 
 				System.out.println(me); 
 				boolean inPiece = false;
@@ -63,7 +66,7 @@ public class BoardPanel extends JPanel{
 
 
 							//se ja existir peça amarela, fazer clear e voltar a preencher
-							if(alreadyHasOption && p.getColor() != Piece.YELLOW){
+							if(alreadyHasOption && p.getColor() != Piece.YELLOW && ! isMultiplePlay){
 								pieces.clear();
 								plays.clear();
 								fillPieces();
@@ -91,7 +94,7 @@ public class BoardPanel extends JPanel{
 											PlayType playType = plays.get(i).getMoves().get(moveIndex).type;
 
 											for(int j = i; j < plays.size(); j++){
-												
+
 												if(plays.get(j).getMoves().size() > moveIndex){
 													if(plays.get(j).getMoves().get(moveIndex).pFinal.x == p.getRow() && plays.get(j).getMoves().get(moveIndex).pFinal.y == p.getColumn() && plays.get(j).getMoves().get(moveIndex).type != playType){
 														doubleOption = true;
@@ -141,7 +144,7 @@ public class BoardPanel extends JPanel{
 							}
 						}
 
-						if(moved){
+						if(moved){							
 							pieces.clear();
 							fillPieces();
 
@@ -189,8 +192,8 @@ public class BoardPanel extends JPanel{
 											selectedPosition = plays.get(i).getMoves().get(moveIndex-1).pFinal;
 
 											for(int j = i; j < plays.size(); j++){
-												System.out.println("MOVE FINAL: " + plays.get(j).getMoves().get(moveIndex-1).pFinal);
-												System.out.println("SELECTED: " + selectedPosition);
+												//System.out.println("MOVE FINAL: " + plays.get(j).getMoves().get(moveIndex-1).pFinal);
+												//System.out.println("SELECTED: " + selectedPosition);
 
 												/*
 											if(plays.get(j).getMoves().get(moveIndex-1).pFinal.equals(selectedPosition))
@@ -213,6 +216,20 @@ public class BoardPanel extends JPanel{
 								}
 							}
 
+							//verificar se venceu
+							int winner = gui.game.getBoard().getWinner();
+
+							if(winner == Game.WHITE){
+								gui.text.setText("White player won!");
+								//remover mouselistener
+								((JPanel)me.getSource()).removeMouseListener(ml);
+							}
+							else if(winner == Game.BLACK){
+								gui.text.setText("Black player won!");
+								//remover mouselistener
+								((JPanel)me.getSource()).removeMouseListener(ml);
+							}
+							
 							break;
 						}
 						if(! alreadyHasOption && p.getColor() == gui.game.getTurn()){
@@ -262,20 +279,58 @@ public class BoardPanel extends JPanel{
 					moveIndex = 0;
 					System.out.println("CLEAR");
 				}
+				
+				
 
 			}
 		}); 
 
 		this.setBackground(Color.GRAY);
-		this.setPreferredSize(new Dimension(1000, 600));
+		
 
 	}
 
+	
+	
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 
+		System.out.println("REPAINT");
+		
+		int beforeMarginHorizontal = marginHorizontal;
+		int beforeMarginVertical = marginVertical;
+		
 		updateMargins();
 
+		if(beforeMarginHorizontal != marginHorizontal || beforeMarginVertical != marginVertical){
+			if(! isMultiplePlay){
+				pieces.clear();
+				plays.clear();
+				moveIndex = 0;
+			}
+			else{
+				//voltar a pintar as peças nas novas posições (incluindo a amarela)
+				ArrayList<Piece> piecesAux = new ArrayList<Piece>();
+				
+				for(Piece p : pieces){
+					Piece pieceAux = null;
+					
+					Shape shape = new Ellipse2D.Double(marginHorizontal*(p.getColumn()+1)-pieceRadius/2, marginVertical*(p.getRow()+1)-pieceRadius/2, pieceRadius, pieceRadius);
+					
+					if(p.getColor() == Piece.YELLOW)
+						pieceAux = new Piece(p.getRow(), p.getColumn(), shape, true, Piece.YELLOW);	
+					else
+						pieceAux = new Piece(p.getRow(), p.getColumn(), shape, false, p.getColor());
+					
+					piecesAux.add(pieceAux);
+				}
+				
+				pieces.clear();
+				pieces = piecesAux;
+			}
+			
+		}
+		
 		//vertical lines
 		for(int i = 0; i < 9; i++){
 			g.drawLine(marginHorizontal + marginHorizontal*i, marginVertical, marginHorizontal + marginHorizontal*i, marginVertical + marginVertical*4); 
