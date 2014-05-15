@@ -227,6 +227,12 @@ public class Board {
 		return moves;
 	}
 
+
+    public void movePlay(Play p) {
+        for(Move m: p.getMoves()) {
+            move(m);
+        }
+    }
 	public void move(Move m) {
 
 		ArrayList<Position> gainedPieces = gainedPieces(m.pInit, m.pFinal,
@@ -269,122 +275,112 @@ public class Board {
 
 		for (Move m : firstMoves) {
 			if (m.type == PlayType.BOTH) {
-				Play p1 = new Play();
-				Play p2 = new Play();
+                Play p1 = new Play();
+                Play p2 = new Play();
 
-				Move m1 = null;
-				try {
-					m1 = (Move) m.clone();
-				} catch (CloneNotSupportedException e) {
-					e.printStackTrace();
-				}
-				m1.type = PlayType.WITHDRAWAL;
-				p1.addMove(m1);
+                Move m1 = null;
+                try {
+                    m1 = (Move) m.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+                m1.type = PlayType.WITHDRAWAL;
+                p1.addMove(m1);
 
-				Move m2 = null;
-				try {
-					m2 = (Move) m.clone();
-				} catch (CloneNotSupportedException e) {
-					e.printStackTrace();
-				}
-				m2.type = PlayType.APPROACH;
-				p2.addMove(m2);
+                Move m2 = null;
+                try {
+                    m2 = (Move) m.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+                m2.type = PlayType.APPROACH;
+                p2.addMove(m2);
 
-				plays.addAll(completePlay(color, p1));
-				plays.addAll(completePlay(color, p2));
+                plays.add(p1);
+                plays.add(p2);
 
-			} else {
-				Play p = new Play();
-				try {
-					p.addMove((Move) m.clone());
-				} catch (CloneNotSupportedException e) {
-					e.printStackTrace();
-				}
-				plays.addAll(completePlay(color, p));
-			}
+            } else {
+                Play p = new Play();
+                try {
+                    p.addMove((Move) m.clone());
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+                plays.add(p);
+            }
 		}
+            boolean iterate = true;
+            while( iterate) {
+                iterate = false;
+                for (int j = 0; j < plays.size(); j++) {
+                    Play p = plays.get(j);
+                    int[][] temp = myBoardClone(b);
+
+                    movePlay(p);
+                    ArrayList<Move> nextMoves = getMovesInPosition(p.getLastMove().pFinal);
+                    removeNonesBoth(nextMoves);
+                    for (int i=0; i < nextMoves.size(); i++) {
+                        if (!p.validPlay(nextMoves.get(i))) {
+                            nextMoves.remove(i);
+                            i--;
+                        }
+                    }
+
+                    if (nextMoves.size() > 0 )  {
+                        iterate = true;
+
+                        for (Move moveToAdd : nextMoves) {
+                            Play newPlay = new Play(p);
+                            newPlay.addMove(moveToAdd);
+
+
+                            plays.add(newPlay);
+                        }
+                        plays.remove(j);
+                        j--;
+                    }
+                    b = myBoardClone(temp);
+
+                }
+
+        }
+
 		return plays;
 	}
+    private void removeNonesBoth( ArrayList<Move> nextMoves) {
+        for (int i = 0; i < nextMoves.size(); i++) {
+            Move m = nextMoves.get(i);
+            if (m.type == PlayType.NONE) {
+                nextMoves.remove(m);
+                i--;
+            }
+            else if (m.type == PlayType.BOTH) {
 
-	private ArrayList<Play> completePlay(int color, Play oldPlay) {
-		int[][] temp = myBoardClone(b);
+                Move m1 = null;
+                try {
+                    m1 = (Move) m.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+                m1.type = PlayType.WITHDRAWAL;
 
-		ArrayList<Play> returnPlays = new ArrayList<Play>();
-		Position actual = null;
-		try {
-			move((Move) oldPlay.getLastMove().clone());
+                Move m2 = null;
+                try {
+                    m2 = (Move) m.clone();
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
+                m2.type = PlayType.APPROACH;
 
-			actual = (Position) oldPlay.getLastMove().pFinal.clone();
-		} catch (CloneNotSupportedException e1) {
-			e1.printStackTrace();
-		}
+                nextMoves.remove(m);
+                i--;
+                nextMoves.add(m1);
+                nextMoves.add(m2);
 
-		ArrayList<Move> nextMoves = getMovesInPosition(actual);
-		boolean found = false;
 
-		for (Move m : nextMoves) {
-			if (m.type != PlayType.NONE && oldPlay.validPlay(m)) {
-				found = true;
-				break;
-			}
-		}
-		if (!found) {
-			try {
-				if (oldPlay.getLastMove().type != PlayType.NONE)
-					returnPlays.add((Play) oldPlay.clone());
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
-			b = myBoardClone(temp);
-
-			return returnPlays;
-		}
-		for (Move m : nextMoves) {
-			if (m.type != PlayType.NONE) {
-				if (m.type == PlayType.BOTH) {
-					Play p1 = new Play(oldPlay);
-					Play p2 = new Play(oldPlay);
-
-					Move m1 = null;
-					try {
-						m1 = (Move) m.clone();
-					} catch (CloneNotSupportedException e) {
-						e.printStackTrace();
-					}
-					m1.type = PlayType.WITHDRAWAL;
-
-					Move m2 = null;
-					try {
-						m2 = (Move) m.clone();
-					} catch (CloneNotSupportedException e) {
-						e.printStackTrace();
-					}
-					m2.type = PlayType.APPROACH;
-					if (!p1.addMove(m1))
-						returnPlays.addAll(completePlay(color, p1));
-                    else returnPlays.add(p1);
-
-					if (!p2.addMove(m2))
-						returnPlays.addAll(completePlay(color, p2));
-                    else returnPlays.add(p2);
-				} else {
-					Play p = new Play(oldPlay);
-					try {
-						if (p.addMove((Move) m.clone()))
-							returnPlays.addAll(completePlay(color, p));
-                        else returnPlays.add(p);
-					} catch (CloneNotSupportedException e) {
-						e.printStackTrace();
-					}
-
-				}
-			}
-		}
-
-		b = myBoardClone(temp);
-
-		return returnPlays;
-	}
+            }
+        }
+    }
 
 	private int[][] myBoardClone(int[][] oldBoard) {
 

@@ -35,7 +35,8 @@ public class Console {
 				System.out.println(i + " - " + ps.get(i));
 			}
 
-			int input = scan.nextInt();
+			System.out.print("play: ");
+            int input = scan.nextInt();
 
             /*
 			if (possiblePlays.get(input).type == PlayType.BOTH) {
