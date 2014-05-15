@@ -81,6 +81,7 @@ public class Play implements Cloneable {
 		String returnm = "";
 		for (Move m : moves)
 			returnm += m.toString();
+		returnm += "\n";
 		return returnm;
 	}
 

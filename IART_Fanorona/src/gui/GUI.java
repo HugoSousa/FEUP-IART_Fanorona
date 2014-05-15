@@ -85,6 +85,7 @@ public class GUI implements ActionListener{
 		text.setHorizontalAlignment(JTextField.CENTER);
 		Font font = new Font("Verdana", Font.BOLD, 15);
 		text.setFont(font);
+		text.setBackground(Color.WHITE);
 		
 		gameFrame.add(newGame, BorderLayout.PAGE_START);
 		gameFrame.add(boardPanel, BorderLayout.CENTER);
