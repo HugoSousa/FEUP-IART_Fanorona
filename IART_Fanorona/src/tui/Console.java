@@ -3,6 +3,8 @@ package tui;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import logic.AlphaBeta;
+import logic.Board;
 import logic.Board.PlayType;
 import logic.Game;
 import logic.Move;
@@ -31,43 +33,43 @@ public class Console {
 			// de uma cor)
 			ArrayList<Play> ps = game.possiblePlays();
 
-			for (int i=0; i < ps.size(); i++) {
+			for (int i = 0; i < ps.size(); i++) {
 				System.out.println(i + " - " + ps.get(i));
 			}
+			System.out.println("minmax: ");
+			(new AlphaBeta()).minimax((Board) game.getBoard().clone(), 5,
+					game.getTurn());
 
 			System.out.print("play: ");
-            int input = scan.nextInt();
+			int input = scan.nextInt();
 
-            /*
-			if (possiblePlays.get(input).type == PlayType.BOTH) {
-				System.out.println("1 - Withdrawal");
-				System.out.println("2 - Approach");
-				typeInput = scan.nextInt();
+			/*
+			 * if (possiblePlays.get(input).type == PlayType.BOTH) {
+			 * System.out.println("1 - Withdrawal");
+			 * System.out.println("2 - Approach"); typeInput = scan.nextInt();
+			 * 
+			 * if (typeInput == 1) possiblePlays.get(input).type =
+			 * PlayType.WITHDRAWAL; else if (typeInput == 2)
+			 * possiblePlays.get(input).type = PlayType.APPROACH; }
+			 */
 
-				if (typeInput == 1)
-					possiblePlays.get(input).type = PlayType.WITHDRAWAL;
-				else if (typeInput == 2)
-					possiblePlays.get(input).type = PlayType.APPROACH;
+			ArrayList<Move> play = ps.get(input).getMoves();
+
+			for (int i = 0; i < play.size(); i++) {
+				game.move(play.get(i));
 			}
-            */
-
-            ArrayList<Move> play = ps.get(input).getMoves();
-
-            for(int i=0; i <play.size(); i++){
-                game.move(play.get(i));
-            }
 
 			game.switchTurn();
 
-            int winner = game.getBoard().getWinner();
-            if(winner != -1){
-                if(winner == Game.WHITE)
-                    System.out.println("White player won!");
-                else if(winner == Game.BLACK)
-                    System.out.println("Black player won!");
+			int winner = game.getBoard().getWinner();
+			if (winner != -1) {
+				if (winner == Game.WHITE)
+					System.out.println("White player won!");
+				else if (winner == Game.BLACK)
+					System.out.println("Black player won!");
 
-                break;
-            }
+				break;
+			}
 		}
 	}
 

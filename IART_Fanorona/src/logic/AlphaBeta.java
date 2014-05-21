@@ -1,105 +1,140 @@
 package logic;
 
-import java.util.Collection;
+import java.util.ArrayList;
 
 /**
  * Created by Francisco on 15/05/2014.
  */
 public class AlphaBeta {
 
-    public  Movement minimax(Node origin, int depth) {
+	public Play minimax(Board origin, int depth, int color) {
+		Node n = new Node(null, (Board) origin.clone(), color);
 
-        return minimax(origin, 4, Integer.MIN_VALUE, Integer.MAX_VALUE, true);
-    }
+		Node result = minimax(n, depth, Integer.MIN_VALUE, Integer.MAX_VALUE,
+				true);
 
+		System.out.println(result.resultingPlay);
+		return result.resultingPlay;
+	}
 
-    private  Movement minimax(Node node, int depth, int alpha, int beta, boolean maximizingPlayer) {
-            if (depth == 0 || node.terminal()){
-                return (new Movement(node.heuristicValue(), null));
-            }
+	private Node minimax(Node node, int depth, int alpha, int beta, boolean maximizingPlayer) {
+		if (depth == 0 || node.terminal()) {
+			return node;
+		}
 
-        Movement returnMove, bestMove = null;
+		Node returnMove, bestMove = null;
+		Node bestChild = null;
+		if (maximizingPlayer) {
+			for (Node child : node.getChilds()) {
 
-        if (maximizingPlayer){
-            for (Node child: node.getChilds()){
+				returnMove = minimax(child, depth - 1, alpha, beta, false);
 
-                 returnMove = minimax(child, depth - 1, alpha, beta, false);
+				if (bestMove == null) {
+					bestMove = returnMove;
+					bestChild = child;
+				} else if (bestMove.heuristicValue() < returnMove
+						.heuristicValue()) {
+					bestMove = returnMove;
+					bestChild = child;
+				}
 
-                if (bestMove == null) {
-                    bestMove = returnMove;
-                    bestMove.moveNode = child;
-                } else if (bestMove.returnValue  < returnMove.returnValue){
-                    bestMove = returnMove;
-                    bestMove.moveNode = child;
-                }
+				alpha = max(alpha, returnMove.heuristicValue());
+				if (beta <= alpha) {
+					break;
 
+				}
+			}
+			bestChild.heuristicValue = alpha;
+			return bestChild;
+		} else {
+			for (Node child : node.getChilds()) {
 
-                alpha = max(alpha, returnMove.returnValue);
-                if (beta < alpha){
-                    bestMove.returnValue = alpha; // TODO nao sei se e alpha ou beta aqui
-                    bestMove.moveNode = null;
+				returnMove = minimax(child, depth - 1, alpha, beta, true);
 
-                    break;
+				if (bestMove == null) {
+					bestMove = returnMove;
+					bestChild = child;
+				} else if (bestMove.heuristicValue() < returnMove
+						.heuristicValue()) {
+					bestMove = returnMove;
+					bestChild = child;
+				}
 
-                }
-            }
-            return bestMove;
-        }
-        else {
-            for (Node child: node.getChilds()){
+				beta = min(beta, returnMove.heuristicValue());
+				if (beta < alpha) {
 
-                 returnMove = minimax(child, depth - 1, alpha, beta, true);
+					break;
 
-                if (bestMove == null) {
-                    bestMove = returnMove;
-                    bestMove.moveNode = child;
-                } else if (bestMove.returnValue  < returnMove.returnValue){
-                    bestMove = returnMove;  // TODO nao sei se e alpha ou beta aqui
-                    bestMove.moveNode = child;
-                }
+				}
+			}
 
+			bestChild.heuristicValue = beta;
 
-                beta = min(beta, returnMove.returnValue);
-                if (beta < alpha){
-                    bestMove.returnValue = beta; // ?
-                    bestMove.moveNode = null;
+			return bestChild;
+		}
 
-                    break;
+	}
 
-                }
-            }
-            return bestMove;
-        }
+	public static int min(int a, int b) {
+		return Math.min(a, b);
+	}
 
+	public static int max(int a, int b) {
+		return Math.max(a, b);
+	}
 
-    }
+	public class Node {
+		public Play resultingPlay;
+		public Board board;
+		public int color;
+		int heuristicValue = 0;
+		boolean isHeuristicSet = false;
 
+		public Node(Play resultingPlay, Board b, int color) {
+			board = (Board) b.clone();
+			this.color = color;
+			this.resultingPlay = resultingPlay;
+			isHeuristicSet = false;
+		}
 
-    public static int min(int a, int b) {
-       return Math.min(a,b);
-    }
+		public boolean terminal() {
 
+			return (board.possiblePlays(color).size() == 0);
+		}
 
-    public static int max(int a, int b) {
-        return Math.max(a,b);
-    }
+		public int heuristicValue() {
+			if (!isHeuristicSet) {
+				isHeuristicSet = true;
+				heuristicValue = 2 * (board.countPieces(color) - board
+						.countPieces(1 - color));
+			}
+			return heuristicValue;
+		}
 
-    public interface Node {
-        public boolean terminal();
-        public int heuristicValue();
-        public Collection<Node> getChilds();
-        public Node clone();
-    }
+		public ArrayList<Node> getChilds() {
+			ArrayList<Play> plays = board.possiblePlays(color);
+			ArrayList<Node> nodes = new ArrayList<Node>();
 
-    public class Movement  {
-        int returnValue;
-        Node moveNode;
-        public  Movement(int value, Node moveNode ){
-            this.returnValue = value;
-            this.moveNode = moveNode.clone();
-        }
-        public  boolean heuristicValue() {return false;}
-        public  Collection<Node> getChilds() {return null;}
+			for (Play p : plays) {
+				Board temp = (Board) board.clone();
+				temp.movePlay(p);
+				Node n = new Node(p, temp, 1 - color);
+				nodes.add(n);
+			}
+			return nodes;
+		}
 
-    }
+		public Node clone() {
+			Play newPlay = null;
+			try {
+				newPlay = (resultingPlay == null ? null : (Play) resultingPlay
+						.clone());
+			} catch (CloneNotSupportedException e) {
+				e.printStackTrace();
+			}
+
+			return new Node(newPlay, (Board) board.clone(), color);
+		}
+	}
+
 }

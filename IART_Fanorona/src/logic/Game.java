@@ -31,14 +31,15 @@ public class Game {
 
 	public void move(Move m) {
 		board.move(m);
+
 	}
 
 	public ArrayList<Play> possiblePlays() {
 		return board.possiblePlays(turn);
 
 	}
-	
-	public int getTurn(){
+
+	public int getTurn() {
 		return turn;
 	}
 }
