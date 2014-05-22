@@ -106,7 +106,7 @@ public class AlphaBeta {
 			if (!isHeuristicSet) {
 				isHeuristicSet = true;
 				heuristicValue = 2 * (board.countPieces(color) - board
-						.countPieces(1 - color));
+						.countPieces(1 - color)); //
 			}
 			return heuristicValue;
 		}

@@ -6,7 +6,7 @@ import logic.Board.PlayType;
 
 public class Play implements Cloneable {
 
-	ArrayList<Move> moves;
+	private ArrayList<Move> moves;
 
 	public ArrayList<Move> getMoves() {
 		return moves;
@@ -32,37 +32,38 @@ public class Play implements Cloneable {
 		}
 	}
 
+	public boolean validPlay(Move m) {
 
-    public boolean validPlay(Move m){
+		if (moves.size() > 0) {
+			int actualdx = m.pFinal.getX() - m.pInit.getX();
+			int actualdy = m.pFinal.getY() - m.pInit.getY();
 
-        if(moves.size() > 0) {
-            int actualdx = m.pFinal.getX() - m.pInit.getX();
-            int actualdy = m.pFinal.getY() - m.pInit.getY();
+			Move last = moves.get(moves.size() - 1);
 
-            Move last = moves.get(moves.size() - 1);
+			int lastdx = last.pFinal.getX() - last.pInit.getX();
+			int lastdy = last.pFinal.getY() - last.pInit.getY();
 
-            int lastdx = last.pFinal.getX() - last.pInit.getX();
-            int lastdy = last.pFinal.getY() - last.pInit.getY();
+			if (actualdx == lastdx && actualdy == lastdy)
+				return false;
+		}
 
-            if(actualdx == lastdx && actualdy == lastdy)
-                return false;
-        }
+		for (int i = 0; i < moves.size(); i++) {
+			if (i == 0) {
+				if (moves.get(i).pInit.equals(m.pFinal))
+					return false;
+			}
+			if (moves.get(i).pFinal.equals(m.pFinal))
+				return false;
+		}
 
-        for (int i=0; i < moves.size(); i++) {
-            if (i == 0) {
-                if ( moves.get(i).pInit.equals(m.pFinal)) return false;
-            }
-            if ( moves.get(i).pFinal.equals(m.pFinal)) return false;
-        }
-
-        return true;
-    }
+		return true;
+	}
 
 	public boolean addMove(Move m) {
-        if(! this.validPlay(m))
-            return false;
-        else
-            return moves.add(m);
+		if (!this.validPlay(m))
+			return false;
+		else
+			return moves.add(m);
 
 	}
 
@@ -93,5 +94,25 @@ public class Play implements Cloneable {
 			p.moves.add((Move) m.clone());
 		}
 		return p;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Play))
+			return false;
+		Play compare = (Play) obj;
+		if (compare.moves.size() != this.moves.size())
+			return false;
+
+		for (int i = 0; i < this.moves.size(); i++) {
+			if (!(this.moves.get(i).pInit.equals(compare.moves.get(i).pInit)
+					&& this.moves.get(i).pFinal
+							.equals(compare.moves.get(i).pFinal) && this.moves
+						.get(i).type == compare.moves.get(i).type)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

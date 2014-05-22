@@ -37,6 +37,7 @@ public class Console {
 				System.out.println(i + " - " + ps.get(i));
 			}
 			System.out.println("minmax: ");
+
 			(new AlphaBeta()).minimax((Board) game.getBoard().clone(), 5,
 					game.getTurn());
 

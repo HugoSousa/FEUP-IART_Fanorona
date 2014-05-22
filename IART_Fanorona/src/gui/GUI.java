@@ -16,6 +16,8 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import logic.AlphaBeta;
+import logic.Board;
 import logic.Game;
 
 public class GUI implements ActionListener {
@@ -127,13 +129,16 @@ public class GUI implements ActionListener {
 
 	public void switchTurn() {
 		game.switchTurn();
+		System.out.println("minmax: ");
+		(new AlphaBeta()).minimax((Board) game.getBoard().clone(), 5,
+				game.getTurn());
 
 		if (game.getTurn() == Game.WHITE) {
 			text.setText("White pieces turn");
-			System.out.println("1");
+			// System.out.println("1");
 		} else if (game.getTurn() == Game.BLACK) {
 			text.setText("Black pieces turn");
-			System.out.println("2");
+			// System.out.println("2");
 		}
 
 		gameFrame.repaint();

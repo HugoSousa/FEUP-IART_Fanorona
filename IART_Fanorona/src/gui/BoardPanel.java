@@ -204,7 +204,7 @@ public class BoardPanel extends JPanel {
 							pieces.clear();
 							fillPieces();
 
-							System.out.println("PLAYS:" + plays);
+							// System.out.println("PLAYS:" + plays);
 							// procurar play que foi feita (pos init e final e
 							// ver se o moveIndex ainda existe)
 							for (int i = 0; i < plays.size(); i++) {
@@ -218,18 +218,16 @@ public class BoardPanel extends JPanel {
 													.get(moveIndex - 1).pFinal
 													.equals(movePosition)) {
 										if (plays.get(i).getMoves().size() == moveIndex) {
-											System.out
-													.println("NAO HA MAIS JOGADAS");
+											// System.out.println("NAO HA MAIS JOGADAS");
 											isMultiplePlay = false;
 											plays.clear();
 											gui.switchTurn();
 											moveIndex = 0;
 											selectedPosition = null;
 										} else {
-											System.out
-													.println("HA MAIS JOGADAS");
-											System.out.println("PLAYS SIZE: "
-													+ plays.size());
+											// System.out.println("HA MAIS JOGADAS");
+											// System.out.println("PLAYS SIZE: "+
+											// plays.size());
 
 											isMultiplePlay = true;
 											// verificar proximos moves
@@ -299,18 +297,18 @@ public class BoardPanel extends JPanel {
 														.get(j).getMoves()
 														.get(moveIndex - 1).type == lastType)) {
 
-													System.out
-															.println("LAST TYPE: "
-																	+ lastType);
-													System.out
-															.println("MOVE TYPE: "
-																	+ plays.get(
-																			j)
-																			.getMoves()
-																			.get(moveIndex - 1).type);
-													System.out.println("REMOVI A PLAY"
-															+ plays.get(j));
-
+													/*
+													 * System.out
+													 * .println("LAST TYPE: " +
+													 * lastType); System.out
+													 * .println("MOVE TYPE: " +
+													 * plays.get( j) .getMoves()
+													 * .get(moveIndex -
+													 * 1).type);
+													 * System.out.println
+													 * ("REMOVI A PLAY" +
+													 * plays.get(j));
+													 */
 													plays.remove(j);
 													j--;
 
@@ -350,7 +348,7 @@ public class BoardPanel extends JPanel {
 								&& p.getColor() == gui.game.getTurn()) {
 							// verificar as jogadas possiveis
 
-							System.out.println("AQUIIIIII");
+							// System.out.println("AQUIIIIII");
 
 							ArrayList<Play> possiblePlays = gui.game
 									.possiblePlays();
@@ -388,7 +386,7 @@ public class BoardPanel extends JPanel {
 
 									plays.add(play);
 
-									System.out.println("PLAYS: " + plays);
+									// System.out.println("PLAYS: " + plays);
 
 									// se nao existir a piece naquele sitio
 									if (!pieces.contains(piece)) {
@@ -410,7 +408,7 @@ public class BoardPanel extends JPanel {
 					pieces.clear();
 					plays.clear();
 					moveIndex = 0;
-					System.out.println("CLEAR");
+					// system.out.println("CLEAR");
 				}
 
 			}
