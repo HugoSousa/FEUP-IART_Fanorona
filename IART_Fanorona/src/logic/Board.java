@@ -446,7 +446,6 @@ public class Board implements Cloneable {
 		return counter;
 	}
 
-	@Override
 	public Object clone() {
 		Board b = new Board();
 		b.b = myBoardClone(this.b);
@@ -464,4 +463,8 @@ public class Board implements Cloneable {
 	 * 
 	 * }
 	 */
+
+	public int getAvailableMoves(int color) {
+		return 0;
+	}
 }

@@ -16,8 +16,6 @@ import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import logic.AlphaBeta;
-import logic.Board;
 import logic.Game;
 
 public class GUI implements ActionListener {
@@ -33,6 +31,7 @@ public class GUI implements ActionListener {
 	final static String PP_BUTTON = "Player vs Player";
 	final static String CP_BUTTON = "Computer vs Player";
 	final static String CC_BUTTON = "Computer vs Computer";
+	private String clicked;
 
 	public GUI() {
 		game = new Game();
@@ -57,12 +56,7 @@ public class GUI implements ActionListener {
 
 	public void actionPerformed(ActionEvent e) {
 		String buttonText = ((JButton) e.getSource()).getText();
-		if (buttonText.equals(PP_BUTTON))
-			System.out.println("PP");
-		else if (buttonText.equals(CP_BUTTON))
-			System.out.println("CP");
-		else if (buttonText.equals(CC_BUTTON))
-			System.out.println("CC");
+		clicked = buttonText;
 
 		// remover jpanel atual
 		// criar novo jpanel com tabuleiro
@@ -70,7 +64,7 @@ public class GUI implements ActionListener {
 		menuFrame.dispose();
 		gameFrame.setLayout(new BorderLayout());
 
-		final JPanel boardPanel = new BoardPanel();
+		final JPanel boardPanel = new BoardPanel(clicked);
 		boardPanel.setLayout(new GridLayout(5, 9));
 
 		timer = new Timer(100, new ActionListener() {
@@ -130,18 +124,23 @@ public class GUI implements ActionListener {
 	public void switchTurn() {
 		game.switchTurn();
 		System.out.println("minmax: ");
-		(new AlphaBeta()).minimax((Board) game.getBoard().clone(), 5,
-				game.getTurn());
 
+		changeText();
+
+		gameFrame.repaint();
+	}
+
+	public void changeText() {
 		if (game.getTurn() == Game.WHITE) {
 			text.setText("White pieces turn");
-			// System.out.println("1");
 		} else if (game.getTurn() == Game.BLACK) {
 			text.setText("Black pieces turn");
 			// System.out.println("2");
 		}
+	}
 
-		gameFrame.repaint();
+	public String getClicked() {
+		return clicked;
 	}
 
 	public static void main(String[] args) {

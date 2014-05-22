@@ -36,7 +36,7 @@ public class AlphaBetaTest {
 		board[4][4] = 1;
 
 		Play result = (new AlphaBeta())
-				.minimax((Board) board_obj.clone(), 5, 1);
+.minimax((Board) board_obj.clone(), 2, 1); // TODO muda com 3
 
 		Play expectedPlay = new Play();
 		Move m1 = new Move(new Position(1, 2), new Position(1, 1),

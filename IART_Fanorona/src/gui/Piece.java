@@ -9,14 +9,12 @@ public class Piece {
 	private int row;
 	private int column;
 	private Shape shape;
-	private boolean isMove;
 	private int color;
 	
-	public Piece(int row, int column, Shape shape, boolean isMove, int color) {
+	public Piece(int row, int column, Shape shape, int color) {
 		this.row = row;
 		this.column = column;
 		this.shape = shape;
-		this.isMove = isMove;
 		this.color = color;
 	}
 	
