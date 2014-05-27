@@ -4,7 +4,7 @@ package logic;
  * Created by Francisco on 15/05/2014.
  */
 public class AlphaBeta {
-
+	/*
 	public Play minimax2(Board origin, int depth, int color) {
 		Node n = new Node(null, (Board) origin.clone(), color);
 
@@ -88,7 +88,7 @@ public class AlphaBeta {
 		}
 
 	}
-
+	*/
 	private Node minimax(Node node, int depth, boolean maximizingPlayer) {
 		if (depth == 0 || node.terminal()) {
 			node.heuristicValue();

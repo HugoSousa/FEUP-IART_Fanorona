@@ -24,8 +24,12 @@ public class Node {
 	public int heuristicValue() {
 		if (!isHeuristicSet) {
 			isHeuristicSet = true;
-			heuristicValue = 1 * (board.countPieces(1 - color) - board.countPieces(color));
-
+			heuristicValue = 1 * (board.countPieces(1) - board.countPieces(0));
+			
+			/*
+			if(board.countPieces(1-color) == 0)
+				heuristicValue = 9000;
+			*/
 		}
 		return heuristicValue;
 	}

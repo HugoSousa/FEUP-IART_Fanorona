@@ -48,7 +48,7 @@ public class BoardPanel extends JPanel {
 		this.clicked = clicked;
 		// se nao for CC
 		this.addMouseListener(ml = new MouseAdapter() {
-			public void mousePressed(MouseEvent me) {
+			public void mousePressed(final MouseEvent me) {
 				if (BoardPanel.this.clicked.equals(GUI.PP_BUTTON) || (BoardPanel.this.clicked.equals(GUI.CP_BUTTON) && gui.game.getTurn() == 0)) {
 
 					// System.out.println(me);
@@ -263,19 +263,7 @@ public class BoardPanel extends JPanel {
 								}
 
 								// verificar se venceu
-								int winner = gui.game.getBoard().getWinner();
-
-								if (winner == Game.WHITE) {
-									GUI.text.setText("White player won!");
-									GUI.text.setBackground(Color.RED);
-									// remover mouselistener
-									((JPanel) me.getSource()).removeMouseListener(ml);
-								} else if (winner == Game.BLACK) {
-									GUI.text.setText("Black player won!");
-									GUI.text.setBackground(Color.RED);
-									// remover mouselistener
-									((JPanel) me.getSource()).removeMouseListener(ml);
-								}
+								verifyWinner(me);
 
 								break;
 							}
@@ -345,7 +333,7 @@ public class BoardPanel extends JPanel {
 						gui.changeText();
 						(new Thread() {
 							public void run() {
-								Play result = (new AlphaBeta()).minimax((Board) gui.game.getBoard().clone(), 5, gui.game.getTurn());
+								Play result = (new AlphaBeta()).minimax((Board) gui.game.getBoard().clone(), 4, gui.game.getTurn());
 								for (Move m : result.getMoves()) {
 									pieces.clear();
 									gui.game.move(m);
@@ -353,6 +341,9 @@ public class BoardPanel extends JPanel {
 									lines.add(m);
 									repaint();
 									try {
+										if(verifyWinner(me)){
+											break;
+										}
 										Thread.sleep(1000);
 									} catch (InterruptedException e) {
 										e.printStackTrace();
@@ -361,7 +352,8 @@ public class BoardPanel extends JPanel {
 								pieces.clear();
 
 								gui.switchTurn();
-								changeComputerText();
+								if(! verifyWinner(me))
+									changeComputerText();
 								isComputerPlaying = false;
 							}
 						}).start();
@@ -507,6 +499,23 @@ public class BoardPanel extends JPanel {
 				GUI.text.setText("Black pieces turn. Waiting for your click...");
 			}
 		}
+	}
+	
+	private boolean verifyWinner(MouseEvent me){
+		int winner = gui.game.getBoard().getWinner();
+
+		if (winner == Game.WHITE) {
+			GUI.text.setText("White player won!");
+			GUI.text.setBackground(Color.RED);
+			((JPanel) me.getSource()).removeMouseListener(ml);
+			return true;
+		} else if (winner == Game.BLACK) {
+			GUI.text.setText("Black player won!");
+			GUI.text.setBackground(Color.RED);
+			((JPanel) me.getSource()).removeMouseListener(ml);
+			return true;
+		}
+		return false;
 	}
 
 }

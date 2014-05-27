@@ -123,6 +123,7 @@ public class GUI implements ActionListener {
 
 	public void switchTurn() {
 		game.switchTurn();
+		System.out.println("a");
 		System.out.println("minmax: ");
 
 		changeText();
