@@ -21,15 +21,16 @@ public class Node {
 		return (board.possiblePlays(color).size() == 0 || board.possiblePlays(1 - color).size() == 0);
 	}
 
-	public int heuristicValue() {
+	public int heuristicValue(int maincolor) {
 		if (!isHeuristicSet) {
 			isHeuristicSet = true;
-			heuristicValue = 1 * (board.countPieces(1) - board.countPieces(0));
-			
-			/*
-			if(board.countPieces(1-color) == 0)
+			heuristicValue = 1 * (board.countPieces(maincolor) - board.countPieces(1 - maincolor));
+			if (board.countPieces(maincolor) == 0)
+				heuristicValue = -9000;
+
+			if (board.countPieces(1 - maincolor) == 0)
 				heuristicValue = 9000;
-			*/
+
 		}
 		return heuristicValue;
 	}

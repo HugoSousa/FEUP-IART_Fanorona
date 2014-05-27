@@ -89,9 +89,11 @@ public class AlphaBeta {
 
 	}
 	*/
-	private Node minimax(Node node, int depth, boolean maximizingPlayer) {
+	
+
+	private Node minimax(Node node, int depth, int alpha, int beta, boolean maximizingPlayer, int maincolor) {
 		if (depth == 0 || node.terminal()) {
-			node.heuristicValue();
+			node.heuristicValue(maincolor);
 			return node;
 		}
 
@@ -101,10 +103,10 @@ public class AlphaBeta {
 			int bestValue = -9999;
 			for (Node child : node.getChilds()) {
 
-				returnMove = minimax(child, depth - 1, false);
+				returnMove = minimax(child, depth - 1, alpha, beta, false, maincolor);
 
-				if (returnMove.heuristicValue() > bestValue) {
-					bestValue = returnMove.heuristicValue();
+				if (returnMove.heuristicValue(maincolor) > bestValue) {
+					bestValue = returnMove.heuristicValue(maincolor);
 					bestNode = child.clone();
 				}
 
@@ -116,10 +118,10 @@ public class AlphaBeta {
 			int bestValue = 9999;
 			for (Node child : node.getChilds()) {
 
-				returnMove = minimax(child, depth - 1, true);
+				returnMove = minimax(child, depth - 1, alpha, beta, true, maincolor);
 
-				if (returnMove.heuristicValue() < bestValue) {
-					bestValue = returnMove.heuristicValue();
+				if (returnMove.heuristicValue(maincolor) < bestValue) {
+					bestValue = returnMove.heuristicValue(maincolor);
 					bestNode = child.clone();
 				}
 			}
@@ -130,6 +132,19 @@ public class AlphaBeta {
 
 	}
 
+	
+	
+
+
+	public Play minimax(Board origin, int depth, int color) {
+		Node n = new Node(null, (Board) origin.clone(), color);
+		Node result = minimax(n, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true, color);
+
+		System.out.println(result.resultingPlay);
+		System.out.println(result.heuristicValue);
+		return result.resultingPlay;
+	}
+
 	public static int min(int a, int b) {
 		return Math.min(a, b);
 	}
@@ -137,16 +152,5 @@ public class AlphaBeta {
 	public static int max(int a, int b) {
 		return Math.max(a, b);
 	}
-
-	public Play minimax(Board origin, int depth, int color) {
-		Node n = new Node(null, (Board) origin.clone(), color);
-
-		Node result = minimax(n, depth, true);
-
-		System.out.println(result.resultingPlay);
-		System.out.println(result.heuristicValue);
-		return result.resultingPlay;
-	}
-
 
 }
