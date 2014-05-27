@@ -10,6 +10,8 @@ import logic.Position;
 
 import org.junit.Test;
 
+
+
 public class AlphaBetaTest {
 
 	@Test

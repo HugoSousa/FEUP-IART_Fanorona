@@ -16,15 +16,16 @@ public class Node {
 		isHeuristicSet = false;
 	}
 
-	public boolean terminal() {
+	public boolean terminal(int maincolor) {
 
-		return (board.possiblePlays(color).size() == 0 || board.possiblePlays(1 - color).size() == 0);
+		return (board.possiblePlays(maincolor).size() == 0 || board.possiblePlays(1 - maincolor).size() == 0);
 	}
 
 	public int heuristicValue(int maincolor) {
 		if (!isHeuristicSet) {
 			isHeuristicSet = true;
-			heuristicValue = 1 * (board.countPieces(maincolor) - board.countPieces(1 - maincolor));
+			heuristicValue = 1 * (board.countPieces(maincolor) - board.countPieces(1 - maincolor)); // TODO improve heuristic
+			
 			if (board.countPieces(maincolor) == 0)
 				heuristicValue = -9000;
 

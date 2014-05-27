@@ -2,6 +2,7 @@ package gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -10,6 +11,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -333,13 +335,19 @@ public class BoardPanel extends JPanel {
 						gui.changeText();
 						(new Thread() {
 							public void run() {
-								Play result = (new AlphaBeta()).minimax((Board) gui.game.getBoard().clone(), 4, gui.game.getTurn());
+								Play result = (new AlphaBeta()).minimax((Board) gui.game.getBoard().clone(), 6, gui.game.getTurn());
 								for (Move m : result.getMoves()) {
 									pieces.clear();
 									gui.game.move(m);
 									fillPieces();
 									lines.add(m);
-									repaint();
+									EventQueue.invokeLater(new Runnable() {
+
+										@Override
+										public void run() {
+											repaint();
+										}
+									});
 									try {
 										if(verifyWinner(me)){
 											break;
@@ -443,7 +451,11 @@ public class BoardPanel extends JPanel {
 		g2d.setStroke(new BasicStroke(1));
 
 		fillPieces();
-		showBoard(g);
+		try {
+			showBoard(g);
+		}
+ catch (ConcurrentModificationException e) {
+		}
 	}
 
 	public void updateMargins() {
@@ -490,7 +502,7 @@ public class BoardPanel extends JPanel {
 			g2d.draw(s);
 		}
 	}
-	
+
 	public void changeComputerText() {
 		if (BoardPanel.this.clicked.equals(GUI.CC_BUTTON) || (BoardPanel.this.clicked.equals(GUI.CP_BUTTON) && gui.game.getTurn() == 1)) {
 			if (gui.game.getTurn() == Game.WHITE) {
@@ -500,7 +512,7 @@ public class BoardPanel extends JPanel {
 			}
 		}
 	}
-	
+
 	private boolean verifyWinner(MouseEvent me){
 		int winner = gui.game.getBoard().getWinner();
 
