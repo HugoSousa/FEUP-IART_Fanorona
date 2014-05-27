@@ -345,7 +345,7 @@ public class BoardPanel extends JPanel {
 						gui.changeText();
 						(new Thread() {
 							public void run() {
-								Play result = (new AlphaBeta()).minimax((Board) gui.game.getBoard().clone(), 6, gui.game.getTurn());
+								Play result = (new AlphaBeta()).minimax((Board) gui.game.getBoard().clone(), 5, gui.game.getTurn());
 								for (Move m : result.getMoves()) {
 									pieces.clear();
 									gui.game.move(m);

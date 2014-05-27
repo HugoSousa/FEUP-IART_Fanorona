@@ -18,23 +18,14 @@ public class Node {
 
 	public boolean terminal() {
 
-		return (board.possiblePlays(color).size() == 0);
+		return (board.possiblePlays(color).size() == 0 || board.possiblePlays(1 - color).size() == 0);
 	}
 
 	public int heuristicValue() {
 		if (!isHeuristicSet) {
 			isHeuristicSet = true;
-			heuristicValue = 2 * (board.countPieces(color) - board.countPieces(1 - color));// +
-																							// 0.5
-																							// *
-																							// (board.getAvailableMoves(color)
-																							// -
-																							// board.getAvailableMoves(1
-																							// -
-																							// color)));
-																							// //
-																							// TODO
-																							// heuristicvalue
+			heuristicValue = 1 * (board.countPieces(1 - color) - board.countPieces(color));
+
 		}
 		return heuristicValue;
 	}
