@@ -86,7 +86,10 @@ public class GUI implements ActionListener {
 		});
 
 		text.setEditable(false);
-		text.setText("White pieces turn");
+		if (clicked.equals(CC_BUTTON))
+				text.setText("White pieces turn. Waiting for your click...");
+		else
+			text.setText("White pieces turn");
 		text.setHorizontalAlignment(JTextField.CENTER);
 		Font font = new Font("Verdana", Font.BOLD, 15);
 		text.setFont(font);
@@ -123,7 +126,6 @@ public class GUI implements ActionListener {
 
 	public void switchTurn() {
 		game.switchTurn();
-		System.out.println("a");
 		System.out.println("minmax: ");
 
 		changeText();

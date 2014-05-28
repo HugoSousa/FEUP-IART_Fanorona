@@ -155,8 +155,8 @@ public class AlphaBeta {
 		Node n = new Node(null, (Board) origin.clone(), color);
 		Node result = minimax(n, depth, Integer.MIN_VALUE, Integer.MAX_VALUE, true, color);
 
-		System.out.println(result.resultingPlay);
-		System.out.println(result.heuristicValue);
+		//System.out.println(result.resultingPlay);
+		//System.out.println(result.heuristicValue);
 		return result.resultingPlay;
 	}
 
