@@ -60,7 +60,6 @@ public class GUI implements ActionListener {
 
 		// remover jpanel atual
 		// criar novo jpanel com tabuleiro
-		// menuFrame.remove(menu);
 		menuFrame.dispose();
 		gameFrame.setLayout(new BorderLayout());
 
@@ -138,7 +137,6 @@ public class GUI implements ActionListener {
 			text.setText("White pieces turn");
 		} else if (game.getTurn() == Game.BLACK) {
 			text.setText("Black pieces turn");
-			// System.out.println("2");
 		}
 	}
 

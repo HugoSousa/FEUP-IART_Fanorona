@@ -107,8 +107,8 @@ public class Play implements Cloneable {
 		for (int i = 0; i < this.moves.size(); i++) {
 			if (!(this.moves.get(i).pInit.equals(compare.moves.get(i).pInit)
 					&& this.moves.get(i).pFinal
-							.equals(compare.moves.get(i).pFinal) && this.moves
-						.get(i).type == compare.moves.get(i).type)) {
+					.equals(compare.moves.get(i).pFinal) && this.moves
+					.get(i).type == compare.moves.get(i).type)) {
 				return false;
 			}
 		}

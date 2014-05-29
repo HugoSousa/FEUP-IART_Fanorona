@@ -39,7 +39,7 @@ public class AlphaBetaTest {
 		board[4][4] = 1;
 
 		Play result = (new AlphaBeta())
-.minimax((Board) board_obj.clone(), 2, 1);
+				.minimax((Board) board_obj.clone(), 2, 1);
 
 		Play expectedPlay = new Play();
 		Move m1 = new Move(new Position(1, 2), new Position(1, 1),
@@ -51,7 +51,7 @@ public class AlphaBetaTest {
 
 		assertEquals(expectedPlay, result);
 	}
-	
+
 	@Test
 	public void test_fail_with_one_level() {
 		Board board_obj = new Board();
@@ -87,9 +87,9 @@ public class AlphaBetaTest {
 
 		assertFalse( expectedPlay.equals(result));
 	}
-	
-	
-	
+
+
+
 	@Test
 	public void test_block() {
 		Board board_obj = new Board();
@@ -115,7 +115,7 @@ public class AlphaBetaTest {
 
 		assertEquals(expectedPlay, result);
 	}
-	
+
 	@Test
 	public void test_block_less_depth() {
 		Board board_obj = new Board();

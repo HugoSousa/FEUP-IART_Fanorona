@@ -3,6 +3,7 @@ package logic;
 import java.util.ArrayList;
 
 public class Node {
+	public static boolean COMPLEX_HEURISTIC = false;
 	public Play resultingPlay;
 	public Board board;
 	public int color;
@@ -25,7 +26,13 @@ public class Node {
 		if (!isHeuristicSet) {
 			isHeuristicSet = true;
 			heuristicValue = 1 * (board.countPieces(maincolor) - board.countPieces(1 - maincolor)); // TODO improve heuristic
-			
+
+			if (Node.COMPLEX_HEURISTIC) {
+				heuristicValue *= 5;
+				heuristicValue += board.possiblePlays(maincolor).size() - board.possiblePlays(1 - maincolor).size();
+			}
+
+
 			if (board.countPieces(maincolor) == 0)
 				heuristicValue = -9000;
 

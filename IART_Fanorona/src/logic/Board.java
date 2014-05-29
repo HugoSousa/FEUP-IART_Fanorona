@@ -451,18 +451,7 @@ public class Board implements Cloneable {
 		b.b = myBoardClone(this.b);
 		return b;
 	}
-	/*
-	 * public static void main(String[] args) { Board board = new Board();
-	 * board.show();
-	 * 
-	 * Position p1 = new Position(1, 3); Position p2 = new Position(2, 4);
-	 * 
-	 * // Move m = new Move(p1,p2,PlayType.APPROACH);
-	 * 
-	 * System.out.println(board.possibleMoves(WHITE));
-	 * 
-	 * }
-	 */
+	
 
 	public int getAvailableMoves(int color) {
 		return 0;

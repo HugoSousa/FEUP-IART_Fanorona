@@ -54,7 +54,6 @@ public class BoardPanel extends JPanel {
 			public void mousePressed(final MouseEvent me) {
 				if (BoardPanel.this.clicked.equals(GUI.PP_BUTTON) || (BoardPanel.this.clicked.equals(GUI.CP_BUTTON) && gui.game.getTurn() == 0)) {
 
-					// System.out.println(me);
 					boolean inPiece = false;
 					boolean alreadyHasOption = false;
 					boolean moved = false;
@@ -71,21 +70,18 @@ public class BoardPanel extends JPanel {
 					for (Piece p : pieces) {
 						Shape s = p.getShape();
 
-						if (s.contains(me.getPoint())) {// check if mouse is
+						if (s.contains(me.getPoint())) {
+							// check if mouse is
 							// clicked
 							// within shape
 
-							// we can either just print out the object class
-							// name
-							// System.out.println("Clicked a "+s.getClass().getName());
+							
 
 							if (s instanceof Ellipse2D) {
 
 								inPiece = true;
 
-								// se ja existir peça amarela, fazer clear e
-								// voltar
-								// a preencher
+
 								if (alreadyHasOption && p.getColor() != Piece.YELLOW && !isMultiplePlay) {
 									pieces.clear();
 									plays.clear();
@@ -93,9 +89,7 @@ public class BoardPanel extends JPanel {
 
 									break;
 								} else if (alreadyHasOption && p.getColor() == Piece.YELLOW) {
-									// System.out.println("FAZER MOVE");
-									// fazer o move
-									// verificar se há duas formas diferentes de
+									
 									// fazer o move (withdrawal / approach)
 
 									boolean doubleOption = false;
@@ -103,9 +97,7 @@ public class BoardPanel extends JPanel {
 									movePosition = new Position(p.getRow(), p.getColumn());
 
 									for (int i = 0; i < plays.size(); i++) {
-										// System.out.println("MOVE INDEX: " +
-										// moveIndex);
-										// System.out.println("i: " + i);
+										
 										if (plays.get(i).getMoves().size() > moveIndex) {
 
 											if (plays.get(i).getMoves().get(moveIndex).pFinal.x == p.getRow() && plays.get(i).getMoves().get(moveIndex).pFinal.y == p.getColumn()) {
@@ -125,20 +117,13 @@ public class BoardPanel extends JPanel {
 												}
 
 												if (doubleOption) {
-													// jogada com possibilidade
-													// de
+													
 													// withdrawal ou approach
 
 													Object[] options = { "Withdrawal", "Approach" };
 													int n = JOptionPane.showOptionDialog(null, "Choose your play", "", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 
-													// System.out.println("INIT: "
-													// +
-													// selectedPosition);
-													// System.out.println("END: "
-													// +
-													// p.getRow() + " - " +
-													// p.getColumn());
+												
 													if (n == 0) {
 														gui.game.move(new Move(selectedPosition, new Position(p.getRow(), p.getColumn()), PlayType.WITHDRAWAL));
 														lastType = PlayType.WITHDRAWAL;
@@ -147,8 +132,7 @@ public class BoardPanel extends JPanel {
 														lastType = PlayType.APPROACH;
 													}
 
-													// System.out.println("SWITCH LAST TYPE TO "
-													// + lastType);
+													
 													moveIndex++;
 
 													break;
@@ -158,8 +142,7 @@ public class BoardPanel extends JPanel {
 													lastType = plays.get(i).getMoves().get(moveIndex).type;
 													moveIndex++;
 
-													// System.out.println("SWITCH LAST TYPE TO "
-													// + lastType);
+													
 
 													break;
 												}
@@ -174,17 +157,14 @@ public class BoardPanel extends JPanel {
 								pieces.clear();
 								fillPieces();
 
-								// System.out.println("PLAYS:" + plays);
-								// procurar play que foi feita (pos init e final
-								// e
-								// ver se o moveIndex ainda existe)
+							
 								for (int i = 0; i < plays.size(); i++) {
 
 									// pode nao ser esta a play desejada
 									if (plays.get(i).getMoves().size() > moveIndex - 1) {
 										if (plays.get(i).getMoves().get(moveIndex - 1).pInit.equals(selectedPosition) && plays.get(i).getMoves().get(moveIndex - 1).pFinal.equals(movePosition)) {
 											if (plays.get(i).getMoves().size() == moveIndex) {
-												// System.out.println("NAO HA MAIS JOGADAS");
+
 												isMultiplePlay = false;
 												plays.clear();
 												gui.switchTurn();
@@ -192,15 +172,9 @@ public class BoardPanel extends JPanel {
 												moveIndex = 0;
 												selectedPosition = null;
 											} else {
-												// System.out.println("HA MAIS JOGADAS");
-												// System.out.println("PLAYS SIZE: "+
-												// plays.size());
-
+												
 												isMultiplePlay = true;
-												// verificar proximos moves
-												// possiveis, adicionar pieces,
-												// remover plays impossiveis
-
+											
 												for (int k = 0; k < plays.size(); k++) {
 
 													if (plays.get(k).getMoves().size() > moveIndex) {
@@ -222,32 +196,11 @@ public class BoardPanel extends JPanel {
 												selectedPosition = plays.get(i).getMoves().get(moveIndex - 1).pFinal;
 
 												for (int j = 0; j < plays.size(); j++) {
-													// System.out.println("MOVE FINAL: "
-													// +
-													// plays.get(j).getMoves().get(moveIndex-1).pFinal);
-													// System.out.println("SELECTED: "
-													// + selectedPosition);
-
-													// if(plays.get(j).getMoves().get(moveIndex-1).pFinal.equals(selectedPosition))
-													// nextMove =
-													// plays.get(j).getMoves().get(moveIndex).pFinal;
+												
 
 													if (!(plays.get(j).getMoves().get(moveIndex - 1).pFinal.equals(selectedPosition) && plays.get(j).getMoves().get(moveIndex - 1).type == lastType)) {
 
-														/*
-														 * System.out
-														 * .println("LAST TYPE: "
-														 * + lastType);
-														 * System.out
-														 * .println("MOVE TYPE: "
-														 * + plays.get( j)
-														 * .getMoves()
-														 * .get(moveIndex -
-														 * 1).type);
-														 * System.out.println
-														 * ("REMOVI A PLAY" +
-														 * plays.get(j));
-														 */
+													
 														plays.remove(j);
 														j--;
 
@@ -255,10 +208,7 @@ public class BoardPanel extends JPanel {
 
 												}
 
-												// System.out.println("i: " +
-												// i);
-												// System.out.println("moveIndex: "
-												// + moveIndex);
+												
 
 											}
 										}
@@ -273,7 +223,6 @@ public class BoardPanel extends JPanel {
 							if (!alreadyHasOption && p.getColor() == gui.game.getTurn()) {
 								// verificar as jogadas possiveis
 
-								// System.out.println("AQUIIIIII");
 
 								ArrayList<Play> possiblePlays = gui.game.possiblePlays();
 								for (Play play : possiblePlays) {
@@ -285,23 +234,17 @@ public class BoardPanel extends JPanel {
 
 										int moveX = play.getMoves().get(0).pFinal.getX();
 										int moveY = play.getMoves().get(0).pFinal.getY();
-										// System.out.println("INIT: " + initX +
-										// " - " + initY);
-										// System.out.println("Jogada possivel para "
-										// + moveX + " - " + moveY);
+										
 
 										Shape shape = new Ellipse2D.Double(marginHorizontal * (moveY + 1) - pieceRadius / 2, marginVertical * (moveX + 1) - pieceRadius / 2, pieceRadius, pieceRadius);
 
 										Piece piece = new Piece(moveX, moveY, shape, Piece.YELLOW);
-										// plays = possiblePlays;
 										selectedPosition = new Position(initX, initY);
-										// System.out.println("MUDEI SELECTED PIECE PARA "
-										// + selectedPosition);
+							
 
 										plays.add(play);
 
-										// System.out.println("PLAYS: " +
-										// plays);
+										
 
 										// se nao existir a piece naquele sitio
 										if (!pieces.contains(piece)) {
@@ -312,9 +255,7 @@ public class BoardPanel extends JPanel {
 									}
 								}
 
-								// System.out.println("Clicked a circle in pos "
-								// +
-								// p.getRow() + " - " + p.getColumn());
+							
 								break;
 							}
 						}
@@ -326,7 +267,6 @@ public class BoardPanel extends JPanel {
 						pieces.clear();
 						plays.clear();
 						moveIndex = 0;
-						// system.out.println("CLEAR");
 					}
 
 				} else {
@@ -378,7 +318,6 @@ public class BoardPanel extends JPanel {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		// System.out.println("REPAINT");
 
 		int beforeMarginHorizontal = marginHorizontal;
 		int beforeMarginVertical = marginVertical;
@@ -487,7 +426,6 @@ public class BoardPanel extends JPanel {
 	public void showBoard(Graphics g) {
 		Graphics2D g2d = (Graphics2D) g;
 
-		// System.out.println("PIECES SIZE: " + pieces.size());
 
 		for (Piece p : pieces) {
 			if (p.getColor() == Board.BLACK) {
