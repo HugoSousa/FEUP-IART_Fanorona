@@ -117,7 +117,6 @@ public class PerformanceTest {
 		long start_time;
 		
 		for (int j= 0; j < games; j++) {
-			System.out.println(j);
 			Game game = new Game();
 			int i = 0;
 			int winner = Board.EMPTY;
