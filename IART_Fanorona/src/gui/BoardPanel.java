@@ -65,7 +65,6 @@ public class BoardPanel extends JPanel {
 						}
 					}
 
-					// System.out.println("PLAYS SIZE: " + plays.size());
 
 					for (Piece p : pieces) {
 						Shape s = p.getShape();

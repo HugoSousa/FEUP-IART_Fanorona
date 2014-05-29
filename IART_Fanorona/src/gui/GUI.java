@@ -76,7 +76,6 @@ public class GUI implements ActionListener {
 
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("NEW GAME");
 				gameFrame.dispose();
 				gameFrame = new JFrame("Fanorona");
 				menuFrame.setVisible(true);
@@ -125,7 +124,6 @@ public class GUI implements ActionListener {
 
 	public void switchTurn() {
 		game.switchTurn();
-		System.out.println("minmax: ");
 
 		changeText();
 
